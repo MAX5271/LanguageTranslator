@@ -11,8 +11,10 @@ def change(text="Type",srl="English",tran="Hindi"):#defining the function to tra
     translation = trans.translate(text,src=srl,dest=tran)# translating the text
     return translation.text
 
+#function to extract text from images
 def image_to_text(image_path):
     print(image_path)
+    #try catch block to check if the text is recognizable in image uploaded
     try:
         img = Image.open(image_path[0:-1])
 
@@ -36,23 +38,24 @@ def data():
     Dest_txt.insert(END,textGet)
 
 def ImageChange():
-    s = comb_sor.get()
-    d = comb_dest.get()
-    sor = Sor_txt.get(1.0,END)
-    msg = image_to_text(sor)
+    s = comb_sor.get()#getting the source language
+    d = comb_dest.get()#getting the destination language
+    sor = Sor_txt.get(1.0,END)#getting the source image path
+    msg = image_to_text(sor)#extracting the text from the image
     textGet = change(text=msg,srl=s,tran=d)
     #removing the result of the previous query
     Dest_txt.delete(1.0,END)
     #inserting the result of the current query
     Dest_txt.insert(END,textGet)
-    
+
+#text to speech for the output text
 def play():
     t=Dest_txt.get(1.0,END)
     l=''
     for i in LANGUAGES:
         if(LANGUAGES[i]==comb_dest.get().lower()):
             l=i
-    speak(text=t,language=l)
+    speak(text=t,language=l)#speak function created in speak.py
 
 
 
@@ -100,9 +103,11 @@ comb_dest.set("English")
 lab_Sor=Label(root,text="Translation",font=("Cascadia Code",32,"bold"),bg="Black",foreground="White")
 lab_Sor.place(x=0,y=570,height=40,width=300)
 
+#button for the text to speech
 speak_button=Button(text="🔊",bg="White",command=play)
 speak_button.place(x=305,y=588,height=20,width=30)
 
+#destination text coulumn widget
 Dest_txt = Text(frame,font=("Cascadia Code",28,"bold"),wrap=WORD,bg="Black",foreground="White")
 Dest_txt.place(x=10,y=630,height=250,width=780)
 
